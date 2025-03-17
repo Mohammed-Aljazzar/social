@@ -21,10 +21,4 @@ Dwitter is a lightweight social networking web application built with Django. It
 - Bootstrap 4 (included via CDN)
 - Virtual environment (recommended)
 
-## Installation and Setup
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/dwitter.git
-cd dwitter
-```
