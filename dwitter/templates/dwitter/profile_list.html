@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="column">
+    <h2 class="title is-2 has-text-primary mb-4">Explore Profiles</h2>
+    {% for profile in profiles %}
+        <div class="block mb-3 mt-3">
+            <div class="box" style="background-color: var(--light-bg);">
+                <a href="{% url 'dwitter:profile' profile.id %}">
+                    <div class="">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png" alt="Placeholder image" />
+                                </figure>
+                            </div>
+                            <div class="">
+                                <p class="title is-4 has-text-dark">{{ profile.user.username }}</p>
+                                <p class="subtitle is-6 has-text-grey">@{{ profile.user.username|lower }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="box">
+            <p class="has-text-grey">No profiles available yet.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

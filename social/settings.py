@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "dwitter.apps.DwitterConfig",
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -55,7 +57,7 @@ ROOT_URLCONF = "social.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join("BASE_DIRS", "/template")],
+        "DIRS": [os.path.join("BASE_DIRS", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

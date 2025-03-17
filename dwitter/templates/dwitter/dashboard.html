@@ -1,58 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="column">
-{% for followed in user.profile.follows.all %}
-{% for dweet in followed.user.dweets.all %}
-<div class="box">
-{{dweet.body}}
-<span class="is-small has-text-grey-light">
-    ({{ dweet.created_at }} by {{ dweet.user.username }}
-    </span>
-    </div>
-    {% endfor %}
-    {% endfor %}
-    </div>
-   
-    <div class="column is-one-third">
-        {% for dweet in dweets %}
-        <div class="box">
-        {{dweet.body}}
-        <span class="is-small has-text-grey-light">
-        ({{ dweet.created_at }} by {{ dweet.user.username }}
-        </span>
+<div class="column is-two-thirds">
+    {% if user.is_authenticated %}
+        {% if dweets %}
+            {% for dweet in dweets %}
+                <div class="card mt-5 mb-5 p-3" style="background-color: var(--light-bg);">
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-48x48">
+                                <img src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png" alt="User avatar">
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="content" style="position: relative;">
+                                <p>
+                                    <strong>{{ dweet.user.username }}</strong>
+                                    <span class="timestamp" style="position: absolute; top: 0; right: 0; font-size: 0.8rem; color: #999;">
+                                        {{ dweet.created_at|timesince }} ago
+                                    </span>
+                                    <br>
+                                    {{ dweet.body }}
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="card mt-5 mb-5">
+                <p class="has-text-grey">No dweets yet. Follow some users to see their posts!</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="card mt-5 mb-5">
+            <p class="title is-4">Welcome to Dwitter!</p>
+            <p>Please <a href="{% url 'dwitter:login' %}">log in</a> to see your dashboard and start dweeting.</p>
         </div>
-        {% endfor %}
-        <div class="block">
-    <a href="{% url 'dwitter:profile_list' %} ">
-    <button class="button is-dark is-outlined is-fullwidth">
-    All Profiles
-    </button>
-    </a>
+    {% endif %}
+</div>
+
+<div class="column is-one-third mt-2 mb-5" >
+    <div class="buttons mt-4">
+        <a href="{% url 'dwitter:profile_list' %}" class="button is-dark is-outlined is-fullwidth">All Profiles</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'dwitter:profile' user.profile.id %}" class="button is-success is-light is-outlined is-fullwidth">My Profile</a>
+        {% endif %}
     </div>
+
+    {% if user.is_authenticated %}
+        <div class="box" style="background-color: var(--light-bg);">
+            <h2 class="title is-3 has-text-primary">Add a Dweet</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="button is-success is-fullwidth is-medium mt-4" type="submit">Dweet</button>
+            </form>
+        </div>
+    {% endif %}
+
     
-    <div class="block">
-    <a href="{% url 'dwitter:profile' request.user.profile.id %} ">
-    <button class="button is-success is-light is-outlined is-fullwidth">
-    My Profile
-    </button>
-    </a>
-    </div>
-    
-    <div class="block">
-    <div class="block">
-    <h2 class="title is-2">Add a Dweet</p>
-    </div>
-    
-    <div class="block">
-    <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="button is-success is-fullwidth is-medium mt-5"
-    type="submit">Dweet
-    </button>
-    </form>
-    </div>
-   
-    </div>
-    </div>
-    {% endblock content %}
+</div>
+{% endblock content %}

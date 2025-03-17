@@ -1,27 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Include the Bulma CSS framework for styling -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
     <title>Dwitter</title>
-  </head>
-  <body>
-    <section class="hero is-small is-success mb-4">
-      <div class="hero-body">
-        <h1 class="title is-1">Dwitter</h1>
-        <p class="subtitle is-4">Your tiny social network built with Django</p>
+    <style>
+      a{
+        text-decoration: none; !important
+      }
+        :root {
+            --primary: #00d1b2;
+            --secondary: #ff6f61;
+            --light-bg: #f5f5f5;
+            --dark-text: #363636;
+        }
+        .navbar { background-color: var(--primary); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .navbar-item, .navbar-link { color: white !important; }
+        .navbar-item:hover, .navbar-link:hover { background-color: var(--secondary) !important; }
+        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .footer { background-color: var(--light-bg); padding: 2rem 0; color: var(--dark-text); }
+        .box { transition: transform 0.2s ease-in-out; }
+        .box:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        @media screen and (max-width: 700px) {
+          #navbarMenu {
+              background-color: var(--primary);
+          }
+      }
+      @media screen and (min-width: 700px) {
+        .margintop{
+            margin-top: 140px;
+        }
+    }
+      .navbar-burger,.navbar-burger:hover {
+        color: white;
+      }
+    </style>
+</head>
+<body>
+    <nav class="navbar is-fixed-top " role="navigation" aria-label="main navigation">
+      <div class="container">
+
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'dwitter:dashboard' %}">
+                <h1 class="title is-4 has-text-white">Dwitter</h1>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="{% url 'dwitter:dashboard' %}">Dashboard</a>
+                <a class="navbar-item" href="{% url 'dwitter:profile_list' %}">Profiles</a>
+                <a class="navbar-item" href="{% url 'dwitter:all_users' %}">All Users</a>
+                {% if user.is_authenticated %}
+                    <a class="navbar-item" href="{% url 'dwitter:profile' user.profile.id %}">My Profile</a>
+                {% endif %}
+            </div>
+            <div class="navbar-end">
+                {% if user.is_authenticated %}
+                    <a class="navbar-item" href="{% url 'dwitter:logout' %}">Logout</a>
+                {% else %}
+                    <a class="navbar-item" href="{% url 'dwitter:login' %}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="is-small mb-4" style="padding-top: 90px; background-color: var(--primary);">
+      <div class="hero-body container has-text-centered">
+          <p class="title is-1 has-text-white">Dwitter</p>
+          <p class="subtitle is-4 has-text-white">Your tiny social network built with Django</p>
+          <p class="content has-text-white mb-5">
+              Connect, share, and dweet your thoughts in 140 characters or less. Join a vibrant community today!
+          </p>
+          <a href="{% url 'dwitter:dashboard' %}" class="button is-large is-secondary is-rounded has-text-weight-bold">
+              <span class="icon">
+                  <i class="fas fa-feather-alt"></i>
+              </span>
+              <span>Start Dweeting Now</span>
+          </a>
       </div>
     </section>
-    <div class="container">
-      <div class="columns">
-        {% block content %} {% endblock content %}
-      </div>
+
+    <div class="container p-4">
+        <div class="columns">
+            {% block content %}{% endblock content %}
+        </div>
     </div>
-  </body>
+
+    <footer class="footer" style="background-color: var(--primary);">
+        <div class="content has-text-centered text-light">
+            <p class="text-light" style="color: #f5f5f5;">© 2025 Dwitter. Built with <i class="fas fa-heart" style="color: var(--secondary);"></i> by Mohammed Aljazzar.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
 </html>

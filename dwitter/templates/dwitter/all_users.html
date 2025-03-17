@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="column">
+    <h2 class="title is-2 has-text-primary mb-4">All Users</h2>
+    {% for user in users %}
+    <a href="{% url 'dwitter:profile' user.profile.id %}">
+        <div class="box" style="background-color: var(--light-bg); margin-bottom: 1rem;">
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-48x48">
+                        <img src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png" alt="User avatar">
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <strong>{{ user.username }}</strong><br>
+                            <small class="has-text-grey">@{{ user.username|lower }}</small>
+                        </p>
+                    </div>
+                </div>
+                {% comment %} {% if user.is_authenticated and profile in user.profile.follows.all %} {% endcomment %}
+                <div class="media-right">
+                    {% if request.user.is_authenticated and user.profile not in request.user.profile.follows.all %}
+                        <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" name="follow" value="{{ user.id }}" class="button is-success is-small">
+                                <span class="icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </span>
+                                <span>Follow</span>
+                            </button>
+                        </form>
+                    {% elif request.user.is_authenticated %}
+                        <button class="button is-success is-small is-static">
+                            <span class="icon">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span>Following</span>
+                        </button>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    </a>
+        
+    {% empty %}
+        <div class="box">
+            <p class="has-text-grey">No users found.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}
