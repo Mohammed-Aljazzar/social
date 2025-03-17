@@ -21,4 +21,5 @@ Dwitter is a lightweight social networking web application built with Django. It
 - Bootstrap 4 (included via CDN)
 - Virtual environment (recommended)
 
-
+## License
+This project is licensed under the MIT License.
